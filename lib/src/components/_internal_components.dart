@@ -36,17 +36,17 @@ class LiveTimeIndicator extends StatefulWidget {
   final double heightPerMinute;
 
   /// Widget to display tile line according to current time.
-  const LiveTimeIndicator(
-      {Key? key,
-      required this.width,
-      required this.height,
-      required this.timeLineWidth,
-      required this.liveTimeIndicatorSettings,
-      required this.heightPerMinute})
-      : super(key: key);
+  const LiveTimeIndicator({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.timeLineWidth,
+    required this.liveTimeIndicatorSettings,
+    required this.heightPerMinute,
+  }) : super(key: key);
 
   @override
-  _LiveTimeIndicatorState createState() => _LiveTimeIndicatorState();
+  State<LiveTimeIndicator> createState() => _LiveTimeIndicatorState();
 }
 
 class _LiveTimeIndicatorState extends State<LiveTimeIndicator> {
@@ -58,7 +58,7 @@ class _LiveTimeIndicatorState extends State<LiveTimeIndicator> {
     super.initState();
 
     _currentDate = DateTime.now();
-    _timer = Timer(Duration(seconds: 1), setTimer);
+    _timer = Timer(const Duration(seconds: 1), setTimer);
   }
 
   @override
@@ -74,7 +74,7 @@ class _LiveTimeIndicatorState extends State<LiveTimeIndicator> {
     if (mounted) {
       setState(() {
         _currentDate = DateTime.now();
-        _timer = Timer(Duration(seconds: 1), setTimer);
+        _timer = Timer(const Duration(seconds: 1), setTimer);
       });
     }
   }
@@ -84,6 +84,7 @@ class _LiveTimeIndicatorState extends State<LiveTimeIndicator> {
     return CustomPaint(
       size: Size(widget.width, widget.height),
       painter: CurrentTimeLinePainter(
+        bulletRadius: 3,
         color: widget.liveTimeIndicatorSettings.color,
         height: widget.liveTimeIndicatorSettings.height,
         offset: Offset(
@@ -142,7 +143,7 @@ class TimeLine extends StatelessWidget {
               left: 0,
               right: 0,
               bottom: height - (hourHeight * (i + 1)) + timeLineOffset,
-              child: Container(
+              child: SizedBox(
                 height: hourHeight,
                 width: timeLineWidth,
                 child: timeLineBuilder.call(
@@ -268,7 +269,7 @@ class EventGenerator<T extends Object?> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: height,
       width: width,
       child: Stack(
@@ -325,7 +326,7 @@ class PressDetector extends StatelessWidget {
     final heightPerSlot = minuteSlotSize.minutes * heightPerMinute;
     final slots = (Constants.hoursADay * 60) ~/ minuteSlotSize.minutes;
 
-    return Container(
+    return SizedBox(
       height: height,
       width: width,
       child: Stack(

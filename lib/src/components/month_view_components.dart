@@ -122,7 +122,7 @@ class FilledCell<T extends Object?> extends StatelessWidget {
       color: backgroundColor,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 5.0,
           ),
           CircleAvatar(
@@ -144,11 +144,11 @@ class FilledCell<T extends Object?> extends StatelessWidget {
           if (events.isNotEmpty)
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(top: 5.0),
+                margin: const EdgeInsets.only(top: 5.0),
                 clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
@@ -161,7 +161,7 @@ class FilledCell<T extends Object?> extends StatelessWidget {
                             color: events[index].color,
                             borderRadius: BorderRadius.circular(4.0),
                           ),
-                          margin: EdgeInsets.symmetric(
+                          margin: const EdgeInsets.symmetric(
                               vertical: 2.0, horizontal: 3.0),
                           padding: const EdgeInsets.all(2.0),
                           alignment: Alignment.center,
@@ -212,9 +212,6 @@ class MonthPageHeader extends CalendarPageHeader {
           onNextDay: onNextMonth,
           onPreviousDay: onPreviousMonth,
           onTitleTapped: onTitleTapped,
-          // ignore_for_file: deprecated_member_use_from_same_package
-          backgroundColor: backgroundColor,
-          iconColor: iconColor,
           dateStringBuilder:
               dateStringBuilder ?? MonthPageHeader._monthStringBuilder,
           headerStyle: headerStyle,
@@ -254,7 +251,7 @@ class WeekDayTile extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.zero,
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       decoration: BoxDecoration(
         color: backgroundColor,
         border: displayBorder
@@ -267,7 +264,7 @@ class WeekDayTile extends StatelessWidget {
       child: Text(
         weekDayStringBuilder?.call(dayIndex) ?? Constants.weekTitles[dayIndex],
         style: textStyle ??
-            TextStyle(
+            const TextStyle(
               fontSize: 17,
               color: Constants.black,
             ),

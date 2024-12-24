@@ -47,9 +47,10 @@ class HourLinePainter extends CustomPainter {
       canvas.drawLine(Offset(offset, dy), Offset(size.width, dy), paint);
     }
 
-    if (showVerticalLine)
+    if (showVerticalLine) {
       canvas.drawLine(Offset(offset + verticalLineOffset, 0),
           Offset(offset + verticalLineOffset, size.height), paint);
+    }
   }
 
   @override
@@ -99,9 +100,13 @@ class CurrentTimeLinePainter extends CustomPainter {
         ..strokeWidth = height,
     );
 
-    if (showBullet)
+    if (showBullet) {
       canvas.drawCircle(
-          Offset(offset.dx, offset.dy), bulletRadius, Paint()..color = color);
+        Offset(offset.dx, offset.dy),
+        bulletRadius,
+        Paint()..color = color,
+      );
+    }
   }
 
   @override

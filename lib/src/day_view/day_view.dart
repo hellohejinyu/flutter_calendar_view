@@ -375,7 +375,10 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
                     onPageChanged: _onPageChange,
                     itemBuilder: (_, index) {
                       final date = DateTime(
-                          _minDate.year, _minDate.month, _minDate.day + index);
+                        _minDate.year,
+                        _minDate.month,
+                        _minDate.day + index,
+                      );
                       return ValueListenableBuilder(
                         valueListenable: _scrollConfiguration,
                         builder: (_, __, ___) => InternalDayViewPage<T>(
@@ -526,7 +529,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
     final heightPerSlot = minuteSlotSize.minutes * heightPerMinute;
     final slots = (Constants.hoursADay * 60) ~/ minuteSlotSize.minutes;
 
-    return Container(
+    return SizedBox(
       height: height,
       width: width,
       child: Stack(
@@ -569,7 +572,9 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
   /// [widget.eventTileBuilder] is null
   ///
   Widget _defaultTimeLineBuilder(date) => DefaultTimeLineMark(
-      date: date, timeStringBuilder: widget.timeStringBuilder);
+        date: date,
+        timeStringBuilder: widget.timeStringBuilder,
+      );
 
   /// Default timeline builder. This builder will be used if
   /// [widget.eventTileBuilder] is null
@@ -581,20 +586,31 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
     DateTime startDuration,
     DateTime endDuration,
   ) {
-    if (events.isNotEmpty)
+    if (events.isNotEmpty) {
       return RoundedEventTile(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(4.0),
         title: events[0].title,
         totalEvents: events.length - 1,
         description: events[0].description,
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(
+          top: 2,
+          bottom: 2,
+          left: 4,
+          right: 4,
+        ),
         backgroundColor: events[0].color,
-        margin: EdgeInsets.all(2.0),
+        margin: const EdgeInsetsDirectional.only(
+          start: 1,
+          top: 1,
+          end: 1,
+          bottom: 1,
+        ),
         titleStyle: events[0].titleStyle,
         descriptionStyle: events[0].descriptionStyle,
       );
-    else
-      return SizedBox.shrink();
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 
   /// Default view header builder. This builder will be used if

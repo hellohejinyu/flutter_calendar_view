@@ -4,6 +4,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lunar/calendar/Lunar.dart';
 
 import '../calendar_event_data.dart';
 import '../constants.dart';
@@ -29,10 +31,10 @@ class RoundedEventTile extends StatelessWidget {
   final int totalEvents;
 
   /// Padding of the tile. Default padding is [EdgeInsets.zero]
-  final EdgeInsets padding;
+  final EdgeInsetsGeometry padding;
 
   /// Margin of the tile. Default margin is [EdgeInsets.zero]
-  final EdgeInsets margin;
+  final EdgeInsetsGeometry margin;
 
   /// Border radius of tile.
   final BorderRadius borderRadius;
@@ -60,54 +62,77 @@ class RoundedEventTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding,
       margin: margin,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: borderRadius,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
         children: [
-          if (title.isNotEmpty)
-            Expanded(
-              child: Text(
-                title,
-                style: titleStyle ??
-                    TextStyle(
-                      fontSize: 20,
-                      color: backgroundColor.accent,
-                    ),
-                softWrap: true,
-                overflow: TextOverflow.fade,
+          Container(
+            width: 3,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadiusDirectional.only(
+                topStart: borderRadius.topLeft,
+                bottomStart: borderRadius.bottomLeft,
               ),
             ),
-          if (description.isNotEmpty)
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
-                child: Text(
-                  description,
-                  style: descriptionStyle ??
-                      TextStyle(
-                        fontSize: 17,
-                        color: backgroundColor.accent.withAlpha(200),
-                      ),
+          ),
+          Expanded(
+            child: Container(
+              padding: padding,
+              decoration: BoxDecoration(
+                color: backgroundColor.withOpacity(.2),
+                borderRadius: BorderRadiusDirectional.only(
+                  topEnd: borderRadius.topRight,
+                  bottomEnd: borderRadius.bottomRight,
                 ),
               ),
-            ),
-          if (totalEvents > 1)
-            Expanded(
-              child: Text(
-                "+${totalEvents - 1} more",
-                style: (descriptionStyle ??
-                        TextStyle(
-                          color: backgroundColor.accent.withAlpha(200),
-                        ))
-                    .copyWith(fontSize: 17),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (title.isNotEmpty)
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: titleStyle ??
+                            const TextStyle(
+                              fontSize: 12,
+                              height: 1.4,
+                              color: Color.fromRGBO(0x36, 0x65, 0x83, 1),
+                              fontWeight: FontWeight.w600,
+                            ),
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  if (description.isNotEmpty)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 15.0),
+                        child: Text(
+                          description,
+                          style: descriptionStyle ??
+                              TextStyle(
+                                fontSize: 17,
+                                color: backgroundColor.accent.withAlpha(200),
+                              ),
+                        ),
+                      ),
+                    ),
+                  if (totalEvents > 1)
+                    Expanded(
+                      child: Text(
+                        "+${totalEvents - 1} more",
+                        style: (descriptionStyle ??
+                                TextStyle(
+                                  color: backgroundColor.accent.withAlpha(200),
+                                ))
+                            .copyWith(fontSize: 17),
+                      ),
+                    ),
+                ],
               ),
             ),
+          ),
         ],
       ),
     );
@@ -130,9 +155,6 @@ class DayPageHeader extends CalendarPageHeader {
   }) : super(
           key: key,
           date: date,
-          // ignore_for_file: deprecated_member_use_from_same_package
-          backgroundColor: backgroundColor,
-          iconColor: iconColor,
           onNextDay: onNextDay,
           onPreviousDay: onPreviousDay,
           onTitleTapped: onTitleTapped,
@@ -140,8 +162,10 @@ class DayPageHeader extends CalendarPageHeader {
               dateStringBuilder ?? DayPageHeader._dayStringBuilder,
           headerStyle: headerStyle,
         );
-  static String _dayStringBuilder(DateTime date, {DateTime? secondaryDate}) =>
-      "${date.day} - ${date.month} - ${date.year}";
+  static String _dayStringBuilder(DateTime date, {DateTime? secondaryDate}) {
+    final lunarDate = Lunar.fromDate(date);
+    return '${DateFormat('yyyy 年 M 月 d 日').format(date)} 周${lunarDate.getWeekInChinese()} ${lunarDate.getYearInGanZhiByLiChun()}年${lunarDate.getMonthInChinese()}月${lunarDate.getDayInChinese()}';
+  }
 }
 
 class DefaultTimeLineMark extends StatelessWidget {
@@ -166,17 +190,21 @@ class DefaultTimeLineMark extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeString = (timeStringBuilder != null)
         ? timeStringBuilder!(date)
-        : "${((date.hour - 1) % 12) + 1} ${date.hour ~/ 12 == 0 ? "am" : "pm"}";
+        : DateFormat('HH:mm').format(date);
+
     return Transform.translate(
-      offset: Offset(0, -7.5),
+      offset: const Offset(0, -7.5),
       child: Padding(
         padding: const EdgeInsets.only(right: 7.0),
         child: Text(
           timeString,
           textAlign: TextAlign.right,
           style: markingStyle ??
-              TextStyle(
-                fontSize: 15.0,
+              const TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+                height: 1.22,
               ),
         ),
       ),
@@ -233,6 +261,11 @@ class FullDayEventView<T> extends StatelessWidget {
                 margin: const EdgeInsets.all(5.0),
                 padding: const EdgeInsets.all(1.0),
                 height: 24,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: events[index].color,
+                ),
+                alignment: Alignment.centerLeft,
                 child: Text(
                   events[index].title,
                   style: titleStyle ??
@@ -242,11 +275,6 @@ class FullDayEventView<T> extends StatelessWidget {
                       ),
                   maxLines: 1,
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: events[index].color,
-                ),
-                alignment: Alignment.centerLeft,
               ),
         ),
       ),

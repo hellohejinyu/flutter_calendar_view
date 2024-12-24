@@ -30,9 +30,6 @@ class WeekPageHeader extends CalendarPageHeader {
           onNextDay: onNextDay,
           onPreviousDay: onPreviousDay,
           onTitleTapped: onTitleTapped,
-          // ignore_for_file: deprecated_member_use_from_same_package
-          iconColor: iconColor,
-          backgroundColor: backgroundColor,
           dateStringBuilder:
               headerStringBuilder ?? WeekPageHeader._weekStringBuilder,
           headerStyle: headerStyle,

@@ -158,6 +158,8 @@ class EventController<T extends Object?> extends ChangeNotifier {
     assert(event.endDate.difference(event.date).inDays >= 0,
         'The end date must be greater or equal to the start date');
     if (_calendarData.eventList.contains(event)) return;
+
+    // endDate 比 date 大于等于 1 天，且 startTime 是 00:00，endTime 是第二天的 00:00
     if (event.endDate.difference(event.date).inDays > 0) {
       if (event.startTime!.isDayStart && event.endTime!.isDayStart) {
         _calendarData.fullDayEventList.add(event);

@@ -286,7 +286,7 @@ class MonthViewState<T extends Object?> extends State<MonthView<T>> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               width: _width,
               child: _headerBuilder(_currentDate),
             ),
@@ -302,7 +302,7 @@ class MonthViewState<T extends Object?> extends State<MonthView<T>> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         width: _width,
                         child: Row(
                           children: List.generate(
@@ -319,7 +319,7 @@ class MonthViewState<T extends Object?> extends State<MonthView<T>> {
                       ),
                       Expanded(
                         child: LayoutBuilder(builder: (context, constraints) {
-                          final _cellAspectRatio =
+                          final cellAspectRatio =
                               widget.useAvailableVerticalSpace
                                   ? calculateCellAspectRatio(
                                       constraints.maxHeight,
@@ -339,7 +339,7 @@ class MonthViewState<T extends Object?> extends State<MonthView<T>> {
                               borderColor: widget.borderColor,
                               borderSize: widget.borderSize,
                               cellBuilder: _cellBuilder,
-                              cellRatio: _cellAspectRatio,
+                              cellRatio: cellAspectRatio,
                               date: date,
                               showBorder: widget.showBorder,
                               startDay: widget.startDay,
@@ -385,8 +385,8 @@ class MonthViewState<T extends Object?> extends State<MonthView<T>> {
   }
 
   double calculateCellAspectRatio(double height) {
-    final _cellHeight = height / 6;
-    return _cellWidth / _cellHeight;
+    final cellHeight = height / 6;
+    return _cellWidth / cellHeight;
   }
 
   void _assignBuilders() {
@@ -608,11 +608,11 @@ class _MonthPageBuilder<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final monthDays = date.datesOfMonths(startDay: startDay);
-    return Container(
+    return SizedBox(
       width: width,
       height: height,
       child: GridView.builder(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 7,
           childAspectRatio: cellRatio,

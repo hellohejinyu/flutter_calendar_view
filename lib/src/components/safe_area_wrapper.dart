@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class SafeAreaWrapper extends SafeArea {
   SafeAreaWrapper({
+    Key? key,
     SafeAreaOption option = const SafeAreaOption(),
     required Widget child,
   }) : super(
+          key: key,
           left: option.left,
           top: option.top,
           right: option.right,
@@ -47,10 +49,10 @@ class SafeAreaOption {
   final bool maintainBottomViewPadding;
 
   const SafeAreaOption({
-    this.left = true,
-    this.top = true,
-    this.right = true,
-    this.bottom = true,
+    this.left = false,
+    this.top = false,
+    this.right = false,
+    this.bottom = false,
     this.minimum = EdgeInsets.zero,
     this.maintainBottomViewPadding = false,
   });

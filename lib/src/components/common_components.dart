@@ -5,7 +5,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
 import '../style/header_style.dart';
 import '../typedefs.dart';
 
@@ -30,16 +29,6 @@ class CalendarPageHeader extends StatelessWidget {
   /// Provides string to display as title.
   final StringProvider dateStringBuilder;
 
-  // TODO: Need to remove after next release
-  /// background color of header.
-  @Deprecated("Use Header Style to provide background")
-  final Color backgroundColor;
-
-  // TODO: Need to remove after next release
-  /// Color of icons at both sides of header.
-  @Deprecated("Use Header Style to provide icon color")
-  final Color iconColor;
-
   /// Style for Calendar's header
   final HeaderStyle headerStyle;
 
@@ -53,10 +42,6 @@ class CalendarPageHeader extends StatelessWidget {
     this.onTitleTapped,
     this.onPreviousDay,
     this.secondaryDate,
-    @Deprecated("Use Header Style to provide background")
-        this.backgroundColor = Constants.headerBackground,
-    @Deprecated("Use Header Style to provide icon color")
-        this.iconColor = Constants.black,
     this.headerStyle = const HeaderStyle(),
   }) : super(key: key);
 
@@ -65,30 +50,28 @@ class CalendarPageHeader extends StatelessWidget {
     return Container(
       margin: headerStyle.headerMargin,
       padding: headerStyle.headerPadding,
-      decoration:
-          // ignore_for_file: deprecated_member_use_from_same_package
-          headerStyle.decoration ?? BoxDecoration(color: backgroundColor),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.withOpacity(.2),
+            width: 1,
+          ),
+        ),
+      ),
       clipBehavior: Clip.antiAlias,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (headerStyle.leftIconVisible)
-            IconButton(
-              onPressed: onPreviousDay,
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              padding: headerStyle.leftIconPadding,
-              icon: headerStyle.leftIcon ??
-                  Icon(
-                    Icons.chevron_left,
-                    size: 30,
-                    color: iconColor,
-                  ),
+            GestureDetector(
+              onTap: onPreviousDay,
+              child: const Icon(
+                Icons.arrow_back_ios_rounded,
+                size: 16,
+              ),
             ),
           Expanded(
-            child: InkWell(
+            child: GestureDetector(
               onTap: onTitleTapped,
               child: Text(
                 dateStringBuilder(date, secondaryDate: secondaryDate),
@@ -98,19 +81,12 @@ class CalendarPageHeader extends StatelessWidget {
             ),
           ),
           if (headerStyle.rightIconVisible)
-            IconButton(
-              onPressed: onNextDay,
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              padding: headerStyle.rightIconPadding,
-              icon: headerStyle.rightIcon ??
-                  Icon(
-                    Icons.chevron_right,
-                    size: 30,
-                    color: iconColor,
-                  ),
+            GestureDetector(
+              onTap: onNextDay,
+              child: const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+              ),
             ),
         ],
       ),

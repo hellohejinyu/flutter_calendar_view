@@ -95,5 +95,8 @@ class CalendarEventData<T extends Object?> {
   }
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode {
+    // 加一行代码避免工具提示这个类无需重写 hashCode
+    return super.hashCode;
+  }
 }
